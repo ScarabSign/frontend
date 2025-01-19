@@ -1,3 +1,4 @@
+import { uint256, stark  } from 'starknet'
 /**
  * Converts a Starknet signature array to a hex string format
  * @param signature Array containing [v, r, s] values from Starknet signature
@@ -6,11 +7,11 @@
 export const formatStarknetSignature = (signature: string[]): string => {
   // Destructure the signature array - Starknet returns [v, r, s]
   const [, r, s] = signature;
-  
+
   // Convert r and s to hex strings, removing '0x' prefix if present
   const rHex = BigInt(r).toString(16).padStart(64, '0');
   const sHex = BigInt(s).toString(16).padStart(64, '0');
-  
+
   // Concatenate with 0x prefix
   return `0x${rHex}${sHex}`;
 }
@@ -33,14 +34,33 @@ export const splitSignature = (hexSignature: string): { r: string, s: string } =
   if (!isValidHexString(hexSignature)) {
     throw new Error('Invalid hex signature format');
   }
-  
+
   // Remove '0x' prefix
   const signatureWithoutPrefix = hexSignature.slice(2);
-  
+
   // Split into r and s components (64 characters each)
   const r = '0x' + signatureWithoutPrefix.slice(0, 64);
   const s = '0x' + signatureWithoutPrefix.slice(64, 128);
-  
+
   return { r, s };
 }
+export const toUint256 = (value: string | number) => {
+  return uint256.bnToUint256(BigInt(value))
 
+}
+
+export const toStarknetAmount = (amount: string | number) => ({
+  token_address: amount.token_address,
+  amount: toUint256(amount.amount)
+
+})
+
+// First, add a helper function to convert signatures to EcdsaSignature format
+
+export const toEcdsaSignature = (sig: string) => {
+    const { r, s } = splitSignature(sig)
+    return {
+        r: BigInt(r),
+        s: BigInt(s)
+    }
+}
