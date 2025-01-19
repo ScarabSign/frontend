@@ -1,7 +1,7 @@
-import './App.css'
+import '../App.css'
 
-import {AuthorizeAuction} from './components/AuthorizeAuction'
-import { AuctionList	} from './components/AuctionList'
+import {AuthorizeAuction} from '../components/AuthorizeAuction'
+import { AuctionList	} from '../components/AuctionList'
 function App() {
   console.log('reload')
   return (

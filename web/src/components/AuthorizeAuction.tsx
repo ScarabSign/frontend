@@ -7,11 +7,11 @@ import { getAuctionChannel  } from './AuctionSubscription';
 
 import { stark, shortString  } from 'starknet';
 import { useContract, useAccount } from '@starknet-react/core'
-
+import { useNavigate } from 'react-router-dom';
 import ScarabSign from '../assets/abi/ScarabSign.json'
 import ERC721 from '../assets/abi/MockERC721.json'
 import ERC20 from '../assets/abi/MockERC20.json'
-
+import { formatStarknetSignature } from '../utils'
 const SN_SEPOLIA = '0x534e5f5345504f4c4941';
 
 /*
@@ -21,7 +21,8 @@ const SN_SEPOLIA = '0x534e5f5345504f4c4941';
    );
  */
 const useInitiateAuction = () => {
-  const { sendMessage  } = useWS(); // Add this line
+  const { sendMessage  } = useWS();
+  const navigate = useNavigate()
 
   const { signTypedDataAsync, error: signError } = useSignTypedData({});
   const [hash, setHash] = useState<string | null>(null)
@@ -84,19 +85,31 @@ const useInitiateAuction = () => {
         }
       const hash = await signTypedDataAsync(typedData)
       console.log('hash', hash)
-      setHash(hash)
+      const signature = formatStarknetSignature(hash)
+      setHash(signature)
       sendMessage(getAuctionChannel(), JSON.stringify({
         type: 'auction_auth',
-        hash,
+        signature,
         data: {
           ...typedData,
           timestamp: Math.floor(Date.now() / 1000)
         }
       }))
+      navigate('/auctions/' + signature, {
+        state: {
+          auctionParams: {
+            auctioneer: message.auctioneer,
+            nft: message.nft,
+            min_bid: message.min_bid,
+            deadline: parseInt(message.deadline),
+            timestamp: Math.floor(Date.now() / 1000)
+          }
+        }
+      })
   } catch (error) {
     console.error(error)
   }
-}, [signTypedDataAsync, chainId])
+}, [signTypedDataAsync, chainId, navigate, sendMessage ])
 
 return {
   hash,

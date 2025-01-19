@@ -3,7 +3,7 @@ import { useWS } from '../WSProvider';
 import { getAuctionChannel } from './AuctionSubscription';
 import { useNavigate } from 'react-router-dom';
 interface AuctionAuth {
-	hash: string;
+	signature: string;
 	data: {
 		auctioneer: string;
 		auctioneer_nonce: number;
@@ -32,11 +32,6 @@ export const AuctionList = () => {
 				if (auctionData.type === 'auction_auth') {
 					console.log('Received auction data:', auctionData);
 					// Convert hash array to string if needed
-					if (Array.isArray(auctionData.hash)) {
-						auctionData.hash = '0x' + Array.from(auctionData.hash)
-						.map(byte => byte.toString(16).padStart(2, '0'))
-						.join('');
-					}
 					setAuctions(prev => [...prev, auctionData]);
 				}
 			} catch (error) {
@@ -48,8 +43,13 @@ export const AuctionList = () => {
 		return () => unsubscribe(getAuctionChannel());
 	}, [subscribe, unsubscribe]);
 
-	const handleEnterAuctionRoom = (auctionHash: string) => {
-    navigate(`/auctions/${auctionHash}`);
+	const handleEnterAuctionRoom = (auction: any) => {
+    auction.data.message.timestamp = auction.data.timestamp
+    navigate(`/auctions/${auction.signature}`, {
+      state: {
+        auctionParams: auction.data.message
+      }
+    });
 	};
 
 	const formatAddress = (address: string) => {
@@ -93,7 +93,7 @@ export const AuctionList = () => {
 				</thead>
 				<tbody>
 					{auctions.map((auction, index) => (
-						<tr key={`${auction.hash}-${index}`}>
+						<tr key={`${auction.signature}-${index}`}>
 							<td>{formatTimestamp(auction.data.timestamp)}</td>
 							<td>{formatAddress(auction.data.message.auctioneer)}</td>
 							<td>{formatAddress(auction.data.message.nft.collection_address)}</td>
@@ -101,11 +101,11 @@ export const AuctionList = () => {
 							<td>{auction.data.message.min_bid.amount}</td>
 							<td>{formatAddress(auction.data.message.min_bid.token_address)}</td>
 							<td>{formatTimestamp(auction.data.message.deadline * 1000)}</td>
-							<td>{formatAddress(auction.hash)}</td>
+							<td>{formatAddress(auction.signature)}</td>
 							<td>
 								<button
 									onClick={() => {
-										handleEnterAuctionRoom(auction.hash); 
+										handleEnterAuctionRoom(auction); 
 									}}>
                   Enter Auction Room
                 </button>

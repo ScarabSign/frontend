@@ -2,10 +2,10 @@ import { useState, useEffect, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSignTypedData, useAccount } from "@starknet-react/core"
 import { useWS } from '../WSProvider'
-import { getAuctionChannel } from './AuctionSubscription'
 import { shortString } from 'starknet'
-
+import { useParams } from 'react-router-dom'
 import ERC20 from '../assets/abi/MockERC20.json'
+import { formatStarknetSignature } from '../utils'
 
 const SN_SEPOLIA = '0x534e5f5345504f4c4941'
 
@@ -20,14 +20,15 @@ interface BidAuthFormData {
   deadline: number
 }
 
-const useInitiateBid = ({auctionSigHash}:{auctionSigHash:string}) => {
+const useInitiateBid = ({ onBidCreated }: { onBidCreated: (bid: any) => void }) => {
+  const { auctionSigHash } = useParams()
   const { sendMessage } = useWS()
   const { signTypedDataAsync } = useSignTypedData({})
   const [hash, setHash] = useState<string | null>(null)
   const { account, chainId } = useAccount()
 
   const fetchBidAuth = useCallback(async (data: BidAuthFormData) => {
-    if (!chainId) return
+    if (!chainId || !auctionSigHash) return
     try {
       const message = {
         bidder: data.bidder,
@@ -70,22 +71,30 @@ const useInitiateBid = ({auctionSigHash}:{auctionSigHash:string}) => {
         primaryType: "Bid"
       }
 
-      const hash = await signTypedDataAsync(typedData)
-      console.log('hash', hash)
-      setHash(hash)
+      const signature = await signTypedDataAsync(typedData)
+      const formattedSignature = formatStarknetSignature(signature)
+      setHash(formattedSignature)
       
-      sendMessage(getAuctionChannel(), JSON.stringify({
+      const bidMessage = {
         type: 'bid_auth',
-        hash,
+        hash: signature,
         data: {
           ...message,
+          signature: formattedSignature,
           timestamp: Math.floor(Date.now() / 1000)
         }
-      }))
+      }
+
+      // Send to websocket
+      sendMessage(`auctions/${auctionSigHash}`, JSON.stringify(bidMessage))
+      
+      // Optimistically update local state
+      onBidCreated(bidMessage)
+
     } catch (error) {
       console.error(error)
     }
-  }, [signTypedDataAsync, chainId, sendMessage, auctionSigHash])
+  }, [signTypedDataAsync, chainId, sendMessage, auctionSigHash, onBidCreated])
 
   return {
     hash,
@@ -94,7 +103,12 @@ const useInitiateBid = ({auctionSigHash}:{auctionSigHash:string}) => {
 }
 
 export const AuthorizeBid = () => {
-  const { hash, fetchBidAuth } = useInitiateBid()
+  const { hash, fetchBidAuth } = useInitiateBid({
+    onBidCreated: (bid) => {
+      // Pass this handler down from AuctionRoom to share state between components
+      window.dispatchEvent(new CustomEvent('newBid', { detail: bid }))
+    }
+  })
   const { address } = useAccount()
   
   const {
@@ -107,10 +121,9 @@ export const AuthorizeBid = () => {
       return {
         bidder: address || '',
         bidder_nonce: Math.floor(Date.now() / 1000),
-        auction_id: '',
         bid: {
           token_address: ERC20.address,
-          amount: 0
+          amount: 161
         },
         deadline: Math.floor(Date.now() / 1000) + 3600
       }
@@ -121,10 +134,9 @@ export const AuthorizeBid = () => {
     reset({
       bidder: address || '',
       bidder_nonce: Math.floor(Date.now() / 1000),
-      auction_id: '',
       bid: {
         token_address: ERC20.address,
-        amount: 0
+        amount: 161
       },
       deadline: Math.floor(Date.now() / 1000) + 3600
     })
@@ -166,18 +178,6 @@ export const AuthorizeBid = () => {
         </div>
 
         <div>
-          <label>Auction ID</label>
-          <input
-            {...register("auction_id", {
-              required: "Required",
-              pattern: { value: /^0x[a-fA-F0-9]+$/, message: "Invalid ID" }
-            })}
-            placeholder="0x..."
-          />
-          {errors.auction_id && <span>{errors.auction_id.message}</span>}
-        </div>
-
-        <div>
           <label>Bid Token Address</label>
           <input
             {...register("bid.token_address", {
@@ -215,6 +215,6 @@ export const AuthorizeBid = () => {
 
         <button type="submit">Create Bid Auth</button>
       </form>
-  </>
+    </>
   )
 }
