@@ -1,0 +1,228 @@
+{
+  "address": "0x0035cc91dcb3c458bb619c942225735e942616a9261fcc14ae12dc9d86e1c6ee",
+  "abi": [
+  {
+    "name": "ScarabSign",
+    "type": "impl",
+    "interface_name": "scarab_sign::scarab_sign::IScarabSign"
+  },
+  {
+    "name": "core::integer::u256",
+    "type": "struct",
+    "members": [
+      {
+        "name": "low",
+        "type": "core::integer::u128"
+      },
+      {
+        "name": "high",
+        "type": "core::integer::u128"
+      }
+    ]
+  },
+  {
+    "name": "scarab_sign::scarab_sign::NftId",
+    "type": "struct",
+    "members": [
+      {
+        "name": "collection_address",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "nft_id",
+        "type": "core::integer::u256"
+      }
+    ]
+  },
+  {
+    "name": "scarab_sign::scarab_sign::TokenAmount",
+    "type": "struct",
+    "members": [
+      {
+        "name": "token_address",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "amount",
+        "type": "core::integer::u256"
+      }
+    ]
+  },
+  {
+    "name": "scarab_sign::scarab_sign::EcdsaSignature",
+    "type": "struct",
+    "members": [
+      {
+        "name": "r",
+        "type": "core::felt252"
+      },
+      {
+        "name": "s",
+        "type": "core::felt252"
+      }
+    ]
+  },
+  {
+    "name": "core::array::Span::<scarab_sign::scarab_sign::EcdsaSignature>",
+    "type": "struct",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<scarab_sign::scarab_sign::EcdsaSignature>"
+      }
+    ]
+  },
+  {
+    "name": "scarab_sign::scarab_sign::Bid",
+    "type": "struct",
+    "members": [
+      {
+        "name": "bidder",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "amount",
+        "type": "scarab_sign::scarab_sign::TokenAmount"
+      },
+      {
+        "name": "nonce",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "auction_sig_hash",
+        "type": "core::array::Span::<scarab_sign::scarab_sign::EcdsaSignature>"
+      }
+    ]
+  },
+  {
+    "name": "core::array::Span::<scarab_sign::scarab_sign::Bid>",
+    "type": "struct",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<scarab_sign::scarab_sign::Bid>"
+      }
+    ]
+  },
+  {
+    "name": "core::array::Span::<core::array::Span::<scarab_sign::scarab_sign::EcdsaSignature>>",
+    "type": "struct",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<core::array::Span::<scarab_sign::scarab_sign::EcdsaSignature>>"
+      }
+    ]
+  },
+  {
+    "name": "scarab_sign::scarab_sign::Auction",
+    "type": "struct",
+    "members": [
+      {
+        "name": "auctioneer",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "auctioneer_nonce",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "nft",
+        "type": "scarab_sign::scarab_sign::NftId"
+      },
+      {
+        "name": "min_bid",
+        "type": "scarab_sign::scarab_sign::TokenAmount"
+      },
+      {
+        "name": "deadline",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "auction_sig_hash",
+        "type": "core::array::Span::<scarab_sign::scarab_sign::EcdsaSignature>"
+      },
+      {
+        "name": "bids",
+        "type": "core::array::Span::<scarab_sign::scarab_sign::Bid>"
+      },
+      {
+        "name": "bid_sigs",
+        "type": "core::array::Span::<core::array::Span::<scarab_sign::scarab_sign::EcdsaSignature>>"
+      }
+    ]
+  },
+  {
+    "name": "scarab_sign::scarab_sign::IScarabSign",
+    "type": "interface",
+    "items": [
+      {
+        "name": "consume_auction",
+        "type": "function",
+        "inputs": [
+          {
+            "name": "auction",
+            "type": "scarab_sign::scarab_sign::Auction"
+          },
+          {
+            "name": "signature_r",
+            "type": "core::felt252"
+          },
+          {
+            "name": "signature_s",
+            "type": "core::felt252"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      }
+    ]
+  },
+  {
+    "kind": "struct",
+    "name": "scarab_sign::scarab_sign::ScarabSign::AuctionConsumed",
+    "type": "event",
+    "members": [
+      {
+        "kind": "data",
+        "name": "nft",
+        "type": "scarab_sign::scarab_sign::NftId"
+      },
+      {
+        "kind": "data",
+        "name": "token",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "kind": "data",
+        "name": "amount",
+        "type": "core::integer::u256"
+      },
+      {
+        "kind": "data",
+        "name": "auctioneer",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "kind": "data",
+        "name": "winner",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
+    "kind": "enum",
+    "name": "scarab_sign::scarab_sign::ScarabSign::Event",
+    "type": "event",
+    "variants": [
+      {
+        "kind": "nested",
+        "name": "AuctionConsumed",
+        "type": "scarab_sign::scarab_sign::ScarabSign::AuctionConsumed"
+      }
+    ]
+  }
+]
+
+
+}

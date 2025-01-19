@@ -1,0 +1,62 @@
+services:
+  auctioneer:
+    build:
+      context: ./web
+      target: development
+    command: npm run dev -- --host 0.0.0.0
+    volumes:
+      - ./web:/app:cached
+      - auctioneer_node_modules:/app/node_modules
+    ports:
+      - "3000:5173"
+      - "3001:3001/tcp" # HMR port
+    environment:
+      - VITE_WS_URL=ws://localhost:8080
+      - VITE_APP_ROLE=auctioneer
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - VITE_HMR_PORT=3001
+    networks:
+      - app-network
+
+  bidder:
+    build:
+      context: ./web
+      target: development
+    command: npm run dev -- --host 0.0.0.0
+    volumes:
+      - ./web:/app:cached
+      - bidder_node_modules:/app/node_modules
+    ports:
+      - "3002:5173"
+      - "3003:3003/tcp" # Different HMR port
+    environment:
+      - VITE_WS_URL=ws://localhost:8080
+      - VITE_APP_ROLE=bidder
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - VITE_HMR_PORT=3003
+    networks:
+      - app-network
+
+  ws-server:
+    build:
+      context: ./socket-server
+      target: development
+    command: node server.js
+    volumes:
+      - ./socket-server:/app
+      - ws_server_node_modules:/app/node_modules
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  auctioneer_node_modules:
+  bidder_node_modules:
+  ws_server_node_modules:
