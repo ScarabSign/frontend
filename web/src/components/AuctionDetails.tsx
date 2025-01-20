@@ -1,5 +1,5 @@
 import React from 'react';
-
+import "../details.css"	
 interface AuctionParameters {
   auctioneer: string;
   nft: {
@@ -46,22 +46,61 @@ export const AuctionDetails: React.FC<AuctionDetailsProps> = ({ auctionParams, a
 
     return `${days}d ${hours}h ${minutes}m remaining`;
   };
+  const deadline = formatDeadline(auctionParams.deadline);
 
   return (
-    <div>
-      <h3>Auction Details</h3>
-      {auctionHash && <p>Hash: {formatAddress(auctionHash)}</p>}
-      <p>Auctioneer: {formatAddress(auctionParams.auctioneer)}</p>
-      <p>Created: {formatTimestamp(auctionParams.timestamp)}</p>
-      <p>Status: {formatDeadline(auctionParams.deadline)}</p>
-      
-      <h3>NFT Details</h3>
-      <p>Collection: {formatAddress(auctionParams.nft.collection_address)}</p>
-      <p>Token ID: {auctionParams.nft.nft_id}</p>
-      
-      <h3>Bid Requirements</h3>
-      <p>Minimum Bid: {auctionParams.min_bid.amount}</p>
-      <p>Token Address: {formatAddress(auctionParams.min_bid.token_address)}</p>
+<div className="details-container">
+      <div className="details-group">
+        <h3>Auction Info</h3>
+        {auctionHash && (
+          <div className="details-row">
+            <span className="details-label">Hash</span>
+            <span className="details-value hash-value">{formatAddress(auctionHash)}</span>
+          </div>
+        )}
+        <div className="details-row">
+          <span className="details-label">Auctioneer</span>
+          <span className="details-value address-value">{formatAddress(auctionParams.auctioneer)}</span>
+        </div>
+        <div className="details-row">
+          <span className="details-label">Created</span>
+          <span className="details-value">{formatTimestamp(auctionParams.timestamp)}</span>
+        </div>
+        <div className="details-row">
+          <span className="details-label">Status</span>
+          <span className={`status-badge ${deadline.isExpired ? 'status-expired' : 'status-active'}`}>
+            {deadline.text}
+          </span>
+        </div>
+      </div>
+
+      <div className="details-group">
+        <h3>NFT Details</h3>
+        <div className="details-row">
+          <span className="details-label">Collection</span>
+          <span className="details-value address-value">
+            {formatAddress(auctionParams.nft.collection_address)}
+          </span>
+        </div>
+        <div className="details-row">
+          <span className="details-label">Token ID</span>
+          <span className="details-value">{auctionParams.nft.nft_id}</span>
+        </div>
+      </div>
+
+      <div className="details-group">
+        <h3>Bid Requirements</h3>
+        <div className="details-row">
+          <span className="details-label">Minimum Bid</span>
+          <span className="details-value">{auctionParams.min_bid.amount}</span>
+        </div>
+        <div className="details-row">
+          <span className="details-label">Token Address</span>
+          <span className="details-value address-value">
+            {formatAddress(auctionParams.min_bid.token_address)}
+          </span>
+        </div>
+      </div>
     </div>
   );
 };

@@ -7,9 +7,7 @@ import { WSProvider } from './WSProvider'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import { AuctionSubscription } from './components/AuctionSubscription'	
-import { WalletStatus } from './components/WalletStatus'
-import { Balances } from './components/Balances'
-
+import { NavBar } from './components/NavBar'
 import App from './views/App.tsx'
 import { AuctionRoom } from './views/AuctionRoom'	
 
@@ -18,9 +16,8 @@ createRoot(document.getElementById('root')!).render(
     <WSProvider	>
       <StarknetProvider>
         <AuctionSubscription />
-        <WalletStatus />
-        <Balances />
         <BrowserRouter>
+          <NavBar />
           <Routes>
             <Route path="/" element={<App />} />
 						<Route path="/auctions/:auctionSigHash" element={<AuctionRoom />} />

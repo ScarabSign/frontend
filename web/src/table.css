@@ -1,0 +1,101 @@
+.data-table-container {
+  margin: 0 auto;
+  width: 95vw;
+  overflow-x: auto;
+  padding: 20px 0;
+}
+
+.data-table-container h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--surface);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  table-layout: fixed;
+}
+
+.data-table thead tr {
+  background-color: var(--background);
+  border-bottom: 2px solid var(--border);
+}
+
+.data-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table td {
+  padding: 12px 16px;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--border);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Column-specific widths */
+.data-table th.time-column,
+.data-table td.time-column {
+  width: 160px;
+}
+
+.data-table th.address-column,
+.data-table td.address-column {
+  width: 130px;
+}
+
+.data-table th.number-column,
+.data-table td.number-column {
+  width: 100px;
+}
+
+.data-table th.action-column,
+.data-table td.action-column {
+  width: 140px;
+  text-align: center;
+}
+
+.data-table tbody tr {
+  transition: all 200ms ease;
+}
+
+.data-table tbody tr:hover {
+  background-color: var(--background);
+}
+
+.data-table button {
+  padding: 6px 12px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  width: 130px;
+  transition: all 200ms ease;
+}
+
+.data-table button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.data-table button:active {
+  transform: translateY(0);
+}

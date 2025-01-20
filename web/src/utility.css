@@ -1,0 +1,78 @@
+.wallet-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+}
+
+.wallet-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--background);
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: var(--text-primary);
+}
+
+.wallet-badge .chain-name {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.wallet-address {
+  color: var(--text-secondary);
+}
+
+.connect-button {
+  padding: 6px 12px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 200ms ease;
+}
+
+.connect-button:hover {
+  background-color: var(--primary-hover);
+}
+
+.balances-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.875rem;
+}
+
+.balance-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--background);
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: var(--text-primary);
+}
+
+.balance-label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.balance-value {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.loading-text {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.error-text {
+  color: var(--error);
+  font-size: 0.875rem;
+}

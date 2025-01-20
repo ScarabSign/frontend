@@ -1,20 +1,45 @@
+:root {
+  /* Color palette */
+  --primary: #7c3aed;
+  --primary-hover: #6d28d9;
+  --primary-light: #ddd6fe;
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --border: #e2e8f0;
+  --error: #ef4444;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
 #root {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
+  background-color: var(--background);
+  min-height: 100vh;
+  color: var(--text-primary);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--background);
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
+  height: 4em;
+  padding: 1em;
   will-change: filter;
-  transition: filter 300ms;
+  transition: all 300ms ease;
 }
+
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 1em var(--primary));
+  transform: scale(1.05);
 }
 
 @keyframes logo-spin {
@@ -33,9 +58,18 @@
 }
 
 .card {
-  padding: 2em;
+  padding: 1.5em;
+  background-color: var(--surface);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  transition: box-shadow 200ms ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
 }
 
 .read-the-docs {
-  color: #888;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
 }

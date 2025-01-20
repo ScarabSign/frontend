@@ -1,3 +1,4 @@
+import '../table.css'
 import React from 'react';
 import { formatStarknetSignature } from '../utils';
 
@@ -40,28 +41,28 @@ export const BidList: React.FC<BidListProps> = ({ bids }) => {
   };
 
   return (
-    <div>
+   <div className="data-table-container">
       <h2>Bids for Auction</h2>
-      <table>
+      <table className="data-table">
         <thead>
           <tr>
-            <th>Time</th>
-            <th>Bidder</th>
-            <th>Nonce</th>
-            <th>Bid Amount</th>
-            <th>Token</th>
-            <th>Signature</th>
+            <th className="time-column">Time</th>
+            <th className="address-column">Bidder</th>
+            <th className="number-column">Nonce</th>
+            <th className="number-column">Bid Amount</th>
+            <th className="address-column">Token</th>
+            <th className="address-column">Signature</th>
           </tr>
         </thead>
         <tbody>
           {bids.map((bid, index) => (
             <tr key={`${bid.data.signature || bid.hash}-${index}`}>
-              <td>{formatTimestamp(bid.data.timestamp)}</td>
-              <td>{formatAddress(bid.data.bidder)}</td>
-              <td>{bid.data.nonce}</td>
-              <td>{bid.data.bid.amount}</td>
-              <td>{formatAddress(bid.data.bid.token_address)}</td>
-              <td>{formatAddress(bid.data.signature || (Array.isArray(bid.hash) ? formatStarknetSignature(bid.hash) : bid.hash))}</td>
+              <td className="time-column">{formatTimestamp(bid.data.timestamp)}</td>
+              <td className="address-column">{formatAddress(bid.data.bidder)}</td>
+              <td className="number-column">{bid.data.nonce}</td>
+              <td className="number-column">{bid.data.bid.amount}</td>
+              <td className="address-column">{formatAddress(bid.data.bid.token_address)}</td>
+              <td className="address-column">{formatAddress(bid.data.signature || (Array.isArray(bid.hash) ? formatStarknetSignature(bid.hash) : bid.hash))}</td>
             </tr>
           ))}
         </tbody>

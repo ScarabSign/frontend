@@ -1,3 +1,4 @@
+import '../Form.css'	
 import { useState, useEffect, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSignTypedData } from "@starknet-react/core";
@@ -182,95 +183,109 @@ export const AuthorizeAuction = () => {
     }
   };
 
-  return (<>
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label>Auctioneer Address</label>
-        <input
-          {...register("auctioneer", { 
-            required: "Required",
-            pattern: { value: /^0x[a-fA-F0-9]+$/, message: "Invalid address" }
-          })}
-          placeholder="0x..."
-        />
-        {errors.auctioneer && <span>{errors.auctioneer.message}</span>}
-      </div>
+  return (
+<>
+      <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
+				<div className="form-group">
+        <div className="form-field">
+          <label className="form-label">Auctioneer Address</label>
+          <input
+            className="form-input"
+            {...register("auctioneer", { 
+              required: "Required",
+              pattern: { value: /^0x[a-fA-F0-9]+$/, message: "Invalid address" }
+            })}
+            placeholder="0x..."
+          />
+          {errors.auctioneer && <span className="error-message">{errors.auctioneer.message}</span>}
+        </div>
 
-      <div>
-        <label>Auctioneer Nonce</label>
-        <input
-          type="number"
-          {...register("auctioneer_nonce", { 
-            required: "Required",
-            min: { value: 0, message: "Must be positive" }
-          })}
-        />
-        {errors.auctioneer_nonce && <span>{errors.auctioneer_nonce.message}</span>}
-      </div>
+        <div className="form-field">
+          <label className="form-label">Auctioneer Nonce</label>
+          <input
+            className="form-input"
+            type="number"
+            {...register("auctioneer_nonce", { 
+              required: "Required",
+              min: { value: 0, message: "Must be positive" }
+            })}
+          />
+          {errors.auctioneer_nonce && <span className="error-message">{errors.auctioneer_nonce.message}</span>}
+        </div>
 
-      <div>
-        <label>NFT Collection Address</label>
-        <input
-          {...register("nft.collection_address", {
-            required: "Required",
-            pattern: { value: /^0x[a-fA-F0-9]+$/, message: "Invalid address" }
-          })}
-          placeholder="0x..."
-        />
-        {errors.nft?.collection_address && <span>{errors.nft.collection_address.message}</span>}
-      </div>
+        <div className="form-field">
+          <label className="form-label">NFT Collection Address</label>
+          <input
+            className="form-input"
+            {...register("nft.collection_address", {
+              required: "Required",
+              pattern: { value: /^0x[a-fA-F0-9]+$/, message: "Invalid address" }
+            })}
+            placeholder="0x..."
+          />
+          {errors.nft?.collection_address && <span className="error-message">{errors.nft.collection_address.message}</span>}
+        </div>
 
-      <div>
-        <label>NFT ID</label>
-        <input
-          type="number"
-          {...register("nft.nft_id", {
-            required: "Required",
-            min: { value: 0, message: "Must be positive" }
-          })}
-        />
-        {errors.nft?.nft_id && <span>{errors.nft.nft_id.message}</span>}
-      </div>
+        <div className="form-field">
+          <label className="form-label">NFT ID</label>
+          <input
+            className="form-input"
+            type="number"
+            {...register("nft.nft_id", {
+              required: "Required",
+              min: { value: 0, message: "Must be positive" }
+            })}
+          />
+          {errors.nft?.nft_id && <span className="error-message">{errors.nft.nft_id.message}</span>}
+        </div>
+				</div>
+				<div className="form-group">
+        <div className="form-field">
+          <label className="form-label">Bid Token Address</label>
+          <input
+            className="form-input"
+            {...register("min_bid.token_address", {
+              required: "Required",
+              pattern: { value: /^0x[a-fA-F0-9]+$/, message: "Invalid address" }
+            })}
+            placeholder="0x..."
+          />
+          {errors.min_bid?.token_address && <span className="error-message">{errors.min_bid.token_address.message}</span>}
+        </div>
 
-      <div>
-        <label>Bid Token Address</label>
-        <input
-          {...register("min_bid.token_address", {
-            required: "Required",
-            pattern: { value: /^0x[a-fA-F0-9]+$/, message: "Invalid address" }
-          })}
-          placeholder="0x..."
-        />
-        {errors.min_bid?.token_address && <span>{errors.min_bid.token_address.message}</span>}
-      </div>
+        <div className="form-field">
+          <label className="form-label">Minimum Bid Amount</label>
+          <input
+            className="form-input"
+            type="number"
+            {...register("min_bid.amount", {
+              required: "Required",
+              min: { value: 0, message: "Must be positive" }
+            })}
+          />
+          {errors.min_bid?.amount && <span className="error-message">{errors.min_bid.amount.message}</span>}
+        </div>
 
-      <div>
-        <label>Minimum Bid Amount</label>
-        <input
-          type="number"
-          {...register("min_bid.amount", {
-            required: "Required",
-            min: { value: 0, message: "Must be positive" }
-          })}
-        />
-        {errors.min_bid?.amount && <span>{errors.min_bid.amount.message}</span>}
-      </div>
-
-      <div>
-        <label>Deadline</label>
-        <input
-          type="number"
-          {...register("deadline", {
-            required: "Required",
-            min: { value: Math.floor(Date.now() / 1000), message: "Must be future" }
-          })}
-        />
-        {errors.deadline && <span>{errors.deadline.message}</span>}
-      </div>
-
-      <button type="submit">Create Auction Auth</button>
-    </form>
-    {hash && <p>Auction Auth Hash: {hash}</p>}
-  </>
+        <div className="form-field">
+          <label className="form-label">Deadline</label>
+          <input
+            className="form-input"
+            type="number"
+            {...register("deadline", {
+              required: "Required",
+              min: { value: Math.floor(Date.now() / 1000), message: "Must be future" }
+            })}
+          />
+          {errors.deadline && <span className="error-message">{errors.deadline.message}</span>}
+        </div>
+          <div className="form-field">
+            <label style={{color:'transparent'}} className="form-label">Sign</label>
+        <button type="submit" className="submit-button">Create Auction Auth</button>
+          </div>
+				</div>
+      </form>
+      
+      {hash && <p className="hash-display">Auction Auth Hash: {hash}</p>}
+    </>
          );
 }	

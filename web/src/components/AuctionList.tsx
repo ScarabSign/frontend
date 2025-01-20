@@ -1,3 +1,4 @@
+import '../table.css'
 import React, { useState, useEffect } from 'react';
 import { useWS } from '../WSProvider';
 import { getAuctionChannel } from './AuctionSubscription';
@@ -75,45 +76,42 @@ export const AuctionList = () => {
 	}
 
 	return (
-		<div>
-			<h2>Recent Auction Authorizations</h2>
-			<table>
-				<thead>
-					<tr>
-						<th>Time</th>
-						<th>Auctioneer</th>
-						<th>NFT Collection</th>
-						<th>NFT ID</th>
-						<th>Min Bid</th>
-						<th>Token</th>
-						<th>Deadline</th>
-						<th>Hash</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{auctions.map((auction, index) => (
-						<tr key={`${auction.signature}-${index}`}>
-							<td>{formatTimestamp(auction.data.timestamp)}</td>
-							<td>{formatAddress(auction.data.message.auctioneer)}</td>
-							<td>{formatAddress(auction.data.message.nft.collection_address)}</td>
-							<td>{auction.data.message.nft.nft_id}</td>
-							<td>{auction.data.message.min_bid.amount}</td>
-							<td>{formatAddress(auction.data.message.min_bid.token_address)}</td>
-							<td>{formatTimestamp(auction.data.message.deadline * 1000)}</td>
-							<td>{formatAddress(auction.signature)}</td>
-							<td>
-								<button
-									onClick={() => {
-										handleEnterAuctionRoom(auction); 
-									}}>
+  <div className="data-table-container">
+      <h2>Recent Auction Authorizations</h2>
+      <table className="data-table">
+        <thead>
+          <tr>
+            <th className="time-column">Time</th>
+            <th className="address-column">Auctioneer</th>
+            <th className="address-column">NFT Collection</th>
+            <th className="number-column">NFT ID</th>
+            <th className="number-column">Min Bid</th>
+            <th className="address-column">Token</th>
+            <th className="time-column">Deadline</th>
+            <th className="address-column">Hash</th>
+            <th className="action-column">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {auctions.map((auction, index) => (
+            <tr key={`${auction.signature}-${index}`}>
+              <td className="time-column">{formatTimestamp(auction.data.timestamp)}</td>
+              <td className="address-column">{formatAddress(auction.data.message.auctioneer)}</td>
+              <td className="address-column">{formatAddress(auction.data.message.nft.collection_address)}</td>
+              <td className="number-column">{auction.data.message.nft.nft_id}</td>
+              <td className="number-column">{auction.data.message.min_bid.amount}</td>
+              <td className="address-column">{formatAddress(auction.data.message.min_bid.token_address)}</td>
+              <td className="time-column">{formatTimestamp(auction.data.message.deadline * 1000)}</td>
+              <td className="address-column">{formatAddress(auction.signature)}</td>
+              <td className="action-column">
+                <button onClick={() => handleEnterAuctionRoom(auction)}>
                   Enter Auction Room
                 </button>
-								</td>
-							</tr>
-									))}
-						</tbody>
-				</table>
-			</div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
 									);
 									};

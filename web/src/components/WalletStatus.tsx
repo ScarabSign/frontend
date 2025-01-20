@@ -1,38 +1,40 @@
-import { useConnect } from '@starknet-react/core'
-
-import { useNetwork  } from "@starknet-react/core";
-import { useAccount } from '@starknet-react/core'
+import { useConnect, useNetwork, useAccount } from '@starknet-react/core'
+import '../utility.css'
 
 const ConnectWallet = () => {
-	const { connect, connectors } = useConnect()
+  const { connect, connectors } = useConnect()
 
-	return (
-		<div>
-			{connectors.map((connector) => (
-				<button 
-					key={connector.id}
-					onClick={() => connect({ connector })}
-				>
-					Connect {connector.name}
-				</button>
-			))}
-		</div>
-	)
+  return (
+    <div className="wallet-status">
+      {connectors.map((connector) => (
+        <button 
+          key={connector.id}
+          onClick={() => connect({ connector })}
+          className="connect-button"
+        >
+          Connect {connector.name}
+        </button>
+      ))}
+    </div>
+  )
 }
+
 export const WalletStatus = () => {
   const { address, isConnected } = useAccount()
   const { chain } = useNetwork();
-  if (isConnected) {
+  
+  if (isConnected && address) {
     return (
-      <div>
-        <p>Connected to {address}</p>
-        <p>On {chain.name}</p>
+      <div className="wallet-status">
+        <div className="wallet-badge">
+          <span className="chain-name">{chain.name}</span>
+          <span className="wallet-address">
+            {address.slice(0, 6)}...{address.slice(-4)}
+          </span>
+        </div>
       </div>
     )
   }
-  return (
-    <div>
-      <ConnectWallet />
-    </div>
-  )
+
+  return <ConnectWallet />
 }
